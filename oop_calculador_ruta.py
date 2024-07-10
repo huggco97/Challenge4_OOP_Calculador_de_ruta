@@ -22,14 +22,15 @@ class Mapa:
             if self.laberinto[x][y] in [1, 2, 3]:  # Verificar si es un obstáculo
                 self.laberinto[x][y] = 0  # Quitar el obstáculo
                 print(f"Obstáculo en la posición {posicion} ha sido quitado.")
+                return True # se quito el obstaculo de forma exitosa
             else:
                 print(f"No hay obstáculo en la posición {posicion} para quitar.")
+                return False
         
             
         else:
             print("La posición dada está fuera del rango del laberinto.")
-
-        return self.laberinto[x][y] == 0
+            return False
     
 
     def imprimir(self):
