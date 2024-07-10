@@ -15,6 +15,20 @@ class Mapa:
         if x < 0 or x >= len(self.laberinto) or y < 0 or y >= len(self.laberinto[0]):
             return False
         return self.laberinto[x][y] == 0
+    
+    def quitar_obstaculo(self, posicion):
+        x, y = posicion
+        if 0 <= x < len(self.laberinto) and 0 <= y < len(self.laberinto[0]):
+            if self.laberinto[x][y] in [1, 2, 3]:  # Verificar si es un obstáculo
+                self.laberinto[x][y] = 0  # Quitar el obstáculo
+                print(f"Obstáculo en la posición {posicion} ha sido quitado.")
+            else:
+                print(f"No hay obstáculo en la posición {posicion} para quitar.")
+        else:
+            print("La posición dada está fuera del rango del laberinto.")
+
+        return self.laberinto[x][y] == 0
+    
 
     def imprimir(self):
         for i, fila in enumerate(self.laberinto):
@@ -102,20 +116,26 @@ class CalculadoraDeRutas:
                 hijo.h = ((hijo.posicion[0] - nodo_fin.posicion[0]) ** 2) + ((hijo.posicion[1] - nodo_fin.posicion[1]) ** 2)
                 hijo.f = hijo.g + hijo.h
 
-                # Si el hijo está en open_list con menor valor de g, saltarlo
+                #  Verifica si hay un nodo en open_list con la misma posición y un menor costo g que el nodo hijo, saltarlo
                 if any(hijo.posicion == nodo_open.posicion and hijo.g > nodo_open.g for nodo_open in open_list):
                     continue
 
                 # Añadir el hijo a open_list
                 open_list.append(hijo)
 
-def solicitar_coordenadas(tipo, mapa):
+def solicitar_coordenadas1(tipo, mapa):
     while True:
         coordenadas = tuple(map(int, input(f"Introduce las coordenadas de {tipo} (En este formato: x,y): ").split(",")))
         if mapa.es_valida(coordenadas):
             return coordenadas
         else:
             print(f"La coordenada de {tipo} no es válida, la coordenada ingresada ya está ocupada. Inténtalo de nuevo por favor.")
+
+def solicitar_coordenadas2(tipo, mapa):
+    while True:
+        coordenadas = tuple(map(int, input(f"Introduce las coordenadas de {tipo} (En este formato: x,y): ").split(",")))
+        if mapa.quitar_obstaculo(coordenadas):
+            return coordenadas
 
 # Crear el mapa
 laberinto = [
@@ -133,17 +153,22 @@ laberinto = [
 mapa = Mapa(laberinto)
 
 # Solicitar coordenada de inicio
-inicio = solicitar_coordenadas("inicio", mapa)
+inicio = solicitar_coordenadas1("inicio", mapa)
 print(f"Coordenada de inicio aceptada: {inicio}")
 
 # Solicitar coordenada de final
-fin = solicitar_coordenadas("fin", mapa)
+fin = solicitar_coordenadas1("fin", mapa)
 print(f"Coordenada de fin aceptada: {fin}")
 
 # Solicitar coordenada de obstáculo
-obstaculo = solicitar_coordenadas("obstáculo", mapa)
+obstaculo = solicitar_coordenadas1("obstáculo", mapa)
 print(f"Coordenada de obstáculo aceptada: {obstaculo}")
 laberinto[obstaculo[0]][obstaculo[1]] = 3
+
+# Solicitar coordenada de obstáculo a quitar
+obstaculo_a_quitar = solicitar_coordenadas2("obstáculo a quitar", mapa)
+mapa.quitar_obstaculo(obstaculo_a_quitar)
+laberinto[obstaculo[0]][obstaculo[1]] = 0
 
 # Crear la calculadora de rutas
 calculadora = CalculadoraDeRutas(mapa)
@@ -162,3 +187,6 @@ laberinto[fin[0]][fin[1]] = 'F'
 
 # Imprimir el mapa con el camino
 mapa.imprimir()
+
+# # Imprimir el mapa después de quitar el obstáculo
+# mapa.imprimir()
