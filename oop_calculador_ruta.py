@@ -21,7 +21,7 @@ class Mapa:
         if 0 <= x < len(self.laberinto) and 0 <= y < len(self.laberinto[0]):
             if self.laberinto[x][y] in [1, 2, 3]:  # Verificar si es un obstáculo
                 self.laberinto[x][y] = 0  # Quitar el obstáculo
-                print(f"Obstáculo en la posición {posicion} ha sido quitado.")
+                print(f"Obstáculo en la posición {posicion} ha sido removido.")
                 return True # se quito el obstaculo de forma exitosa
             else:
                 print(f"No hay obstáculo en la posición {posicion} para quitar.")
@@ -146,7 +146,7 @@ laberinto = [
     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     [1, 0, 0, 1, 0, 0, 0, 1, 0, 0],
     [2, 0, 0, 1, 0, 1, 0, 0, 0, 2],
-    [3, 1, 0, 0, 0, 1, 1, 1, 0, 0],
+    [3, 0, 0, 0, 0, 1, 1, 1, 0, 0],
     [4, 0, 0, 1, 0, 0, 0, 0, 0, 0],
     [5, 1, 0, 0, 0, 0, 0, 0, 0, 0], 
     [6, 1, 0, 1, 0, 0, 1, 0, 1, 2],
